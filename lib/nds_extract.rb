@@ -121,7 +121,7 @@ def studios_by_name(collection)
     studios << movie[:studio]
   end
   
-  studios.to_set.to_a
+  studios.uniq
 end
 
 def movies_with_directors_set(source)
