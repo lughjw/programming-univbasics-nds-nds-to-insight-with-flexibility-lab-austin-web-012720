@@ -48,6 +48,15 @@ def movies_with_director_key(name, movies_collection)
   # Array of Hashes where each Hash represents a movie; however, they should all have a
   # :director_name key. This addition can be done by using the provided
   # movie_with_director_name method
+  
+  a_o_h_movies_with_directors_names = []
+  index = 0
+  while index < movies_collection.size do
+    a_o_h_movies_with_directors_names << movie_with_director_name(name, movies_collection[index])
+    index += 1
+  end
+  
+  a_o_h_movies_with_directors_names
 end
 
 
@@ -57,12 +66,62 @@ def gross_per_studio(collection)
   # each studio.
   #
   # INPUT:
-  # * collection: Array of Hashes where each Hash where each Hash represents a movie
+  # * collection: Array of Hashes where each Hash represents a movie
   #
   # RETURN:
   #
   # Hash whose keys are the studio names and whose values are the sum
   # total of all the worldwide_gross numbers for every movie in the input Hash
+  
+  studio_totals = {}
+  studios = studios_by_name(collection)
+  
+  index = 0
+  while index < studios.size do
+    studio_name = studios[index]
+    studio_totals[studio_name] = calculate_studio_total(studio_name, collection)
+    index += 1
+  end
+  
+  studio_totals
+end
+
+def calculate_studio_total(studio_name, collection)
+  # GOAL: Given the name of the studio sum up its total worldwide_gross
+  # from the collection
+  #
+  # INPUT: 
+  # * studio_name: name of the studio as a String
+  # * collection: Array of Hashes where each Hash represents a movie
+  #
+  # RETURN: worldwide gross for that studio
+  
+  studio_gross = 0
+  collection.each do |movie|
+    if movie[:studio] == studio_name
+      studio_gross += movie[:worldwide_gross]
+    end
+  end
+  
+  studio_gross
+end
+
+def studios_by_name(collection)
+  # GOAL: Given an Array of Hashes where each Hash represents a movie,
+  # return an Array of the names of the studios in the collection
+  #
+  # INPUT: 
+  # * collection: Array of Hashes where each Hash represents a movie
+  #
+  # RETURN: Array of the names of the studios
+  
+  studios = []
+  
+  collection.each do |movie|
+    studios << movie[:studio]
+  end
+  
+  studios.to_set.to_a
 end
 
 def movies_with_directors_set(source)
@@ -76,6 +135,19 @@ def movies_with_directors_set(source)
   #
   # Array of Arrays containing all of a director's movies. Each movie will need
   # to have a :director_name key added to it.
+  
+  
+  movies = []
+  index = 0
+  
+  while index < source.size do
+    director_name = source[index][:name]
+    movies_collection = source[index][:movies]
+    movies << movies_with_director_key(director_name, movies_collection)
+    index += 1
+  end
+  
+  movies
 end
 
 # ----------------    End of Your Code Region --------------------
